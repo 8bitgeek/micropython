@@ -14,7 +14,7 @@ SUPPORTED_FN = {
     "I2S": ["CK", "MCK", "SD", "WS", "EXTSD"],
     "USART": ["RX", "TX", "CTS", "RTS", "DEM", "DEP", "CK"],
     "UART": ["RX", "TX", "CTS", "RTS", "RTS", "DEM"],
-    "LPUART": ["RX", "TX", "CTS", "RTS"],
+    "LPUART": ["RX", "TX", "CTS", "RTS", "RTS", "DEM"],
     "SPI": ["NSS", "SCK", "MISO", "MOSI"],
     "SDMMC": ["CK", "CMD", "D0", "D1", "D2", "D3"],
     "CAN": ["TX", "RX"],
