@@ -126,17 +126,29 @@ STATIC void pyb_uart_print(const mp_print_t *print, mp_obj_t self_in, mp_print_k
         mp_printf(print, ", stop=%u, flow=",
             ((cr2 >> USART_CR2_STOP_Pos) & 3) == 0 ? 1 : 2);
         uint32_t cr3 = self->uartx->CR3;
-        if (!(cr3 & (USART_CR3_CTSE | USART_CR3_RTSE))) {
+        if (!(cr3 & (USART_CR3_CTSE | USART_CR3_RTSE | USART_CR3_DEM | USART_CR3_DEP ))) {
             mp_print_str(print, "0");
         } else {
             if (cr3 & USART_CR3_RTSE) {
                 mp_print_str(print, "RTS");
-                if (cr3 & USART_CR3_CTSE) {
+                if (cr3 & (USART_CR3_CTSE | USART_CR3_DEM | USART_CR3_DEP) ) {
                     mp_print_str(print, "|");
                 }
             }
             if (cr3 & USART_CR3_CTSE) {
                 mp_print_str(print, "CTS");
+                if (cr3 & (USART_CR3_DEM | USART_CR3_DEP) ) {
+                    mp_print_str(print, "|");
+                }
+            }
+            if (cr3 & USART_CR3_DEM) {
+                mp_print_str(print, "DEM");
+                if (cr3 & USART_CR3_DEP ) {
+                    mp_print_str(print, "|");
+                }
+            }
+             if (cr3 & USART_CR3_DEP) {
+                mp_print_str(print, "DEP");
             }
         }
         mp_printf(print, ", timeout=%u, timeout_char=%u, rxbuf=%u",
