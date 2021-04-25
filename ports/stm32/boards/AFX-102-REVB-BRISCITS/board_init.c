@@ -86,7 +86,6 @@ static void run_blue(void* arg)
 void AFX_102_REVB_PRISCITS_board_early_init(void) 
 {
     memset(&app_state,0,sizeof(app_state_t));
-    _fpu_init();
     if ( (main_thread_handle  = b_thread_init( "main" )) >= 0 )
     {
         b_thread_set_systick_fn( SysTick_Handler );
