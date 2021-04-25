@@ -337,8 +337,10 @@ void stm32_main(uint32_t reset_mode) {
     __HAL_FLASH_ART_ENABLE();
     #endif
 
-    SCB_EnableICache();
-    SCB_EnableDCache();
+    #if 0 // BRISCITS
+        SCB_EnableICache();
+        SCB_EnableDCache();
+    #endif
 
     #elif defined(STM32L4)
 
@@ -362,10 +364,14 @@ void stm32_main(uint32_t reset_mode) {
     #endif
 
     // SysTick is needed by HAL_RCC_ClockConfig (called in SystemClock_Config)
-    HAL_InitTick(TICK_INT_PRIORITY);
+    #if 0 // BRISCITS
+        HAL_InitTick(TICK_INT_PRIORITY);
+    #endif
 
     // set the system clock to be HSE
-    SystemClock_Config();
+    #if 0 // BRISCITS
+        SystemClock_Config();
+    #endif
 
     // enable GPIO clocks
     __HAL_RCC_GPIOA_CLK_ENABLE();
