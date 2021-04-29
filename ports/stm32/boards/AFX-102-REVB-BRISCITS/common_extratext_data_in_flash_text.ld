@@ -1,6 +1,6 @@
 /* This linker script fragment is intended to be included in SECTIONS. */
 
-/* For C++ exception handling */
+/* BRISCITS For C++ exception handling */
 .ARM :
 {
     __exidx_start = .;
@@ -20,8 +20,3 @@ _sidata = LOADADDR(.data);
     . = ALIGN(4);
     _edata = .;
 } >RAM AT> FLASH_TEXT
-
-
-/* BRISCITS BOARD TARGET */
-PROVIDE(_data = _sdata);
- 

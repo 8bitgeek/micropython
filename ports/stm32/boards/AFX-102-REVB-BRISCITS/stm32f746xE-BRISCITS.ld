@@ -2,7 +2,8 @@
     GNU linker script for STM32F746
 */
 
-__main_stack_size__     = 0x0C00;
+/* BRISCITS Stack For Interrupt Context */
+__main_stack_size__     = 2K;
 
 MEMORY
 {
@@ -19,7 +20,8 @@ _minimum_stack_size = 2K;
 _minimum_heap_size = 16K;
 
 /* Define the stack.  The stack is full descending so begins just above last byte
-   of RAM.  Note that EABI requires the stack to be 8-byte aligned for a call. */
+   of RAM.  Note that EABI requires the stack to be 8-byte aligned for a call. 
+   BRISCITS: Reserve __main_stack_size__ for ISR stack */
 _estack = ORIGIN(RAM) + LENGTH(RAM) - ( __main_stack_size__ + _estack_reserve );
 _sstack = _estack - 16K; /* tunable */
 
@@ -29,10 +31,6 @@ _ram_end = ORIGIN(RAM) + LENGTH(RAM);
 _heap_start = _ebss; /* heap starts just after statically allocated memory */
 _heap_end = _sstack;
 
-/* BRISCITS */
+/* BRISCITS: Calculate __main_stack_size__ base and end */
 __main_stack_end__ = ORIGIN(RAM) + LENGTH(RAM) - _estack_reserve;
 __main_stack_base__ = __main_stack_end__ - __main_stack_size__;
-__process_stack_end__ = _estack;
-__process_stack_base__ = _sstack;
-__process_stack_size__  = __process_stack_end__ - __process_stack_base__;
-_textdata = ORIGIN(FLASH_TEXT);

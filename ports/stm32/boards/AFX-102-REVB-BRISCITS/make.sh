@@ -12,6 +12,10 @@ elif [ "$1" == "debug" ]; then
 
     arm-none-eabi-gdb -tui -x boards/AFX-102-REVB-BRISCITS/gdbinit
 
+elif [ "$1" == "flash" ]; then
+
+    make BOARD=AFX-102-REVB-BRISCITS OPENOCD_CONFIG=boards/openocd_stm32f7.cfg  deploy-openocd
+
 else
 
     #make -j4 BOARD=AFX-102-REVB-BRISCITS OPENOCD_CONFIG=boards/openocd_stm32f7.cfg  deploy-openocd

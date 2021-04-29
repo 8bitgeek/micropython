@@ -44,7 +44,7 @@ SOFTWARE.
 		.global main
 
         .global __main_stack_end__
-        .global	__process_stack_end__
+        .global	_estack
 
 		.global UsageFault_IRQ_Handler
 		.global BusFault_IRQ_Handler
@@ -61,7 +61,7 @@ briscits_reset_handler:
 		ldr r0, =__main_stack_end__
 		mov sp, r0
 
-		ldr		r0,=__process_stack_end__
+		ldr		r0,=_estack
 		msr		psp,r0
 		movs	r0,#0x02			// PSP stack, unprivilaged can run in thread mode.
 		msr		control,r0

@@ -26,7 +26,3 @@
     . = . + _minimum_stack_size;
     . = ALIGN(4);
 } >RAM
-
-/* BRISCITS SYMBOLS */
-PROVIDE(__bss_start__ = _sbss);
-PROVIDE(__bss_end__ = _ebss);

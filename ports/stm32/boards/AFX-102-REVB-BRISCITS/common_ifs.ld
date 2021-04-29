@@ -41,6 +41,8 @@ SECTIONS
         . = ALIGN(4);
     } >FLASH_ISR
 
+
+    /* BRISCITS C++ Constructors */
     constructors : ALIGN(4) SUBALIGN(4)
     {
         PROVIDE(__init_array_start = .);
@@ -49,6 +51,7 @@ SECTIONS
         PROVIDE(__init_array_end = .);
     } > FLASH_TEXT
 
+    /* BRISCITS C++ Destructors */
     destructors : ALIGN(4) SUBALIGN(4)
     {
         PROVIDE(__fini_array_start = .);
