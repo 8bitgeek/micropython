@@ -1,3 +1,4 @@
+BOARD_DIR=$(PWD)/boards/$(BOARD)
 MCU_SERIES = f7
 CMSIS_MCU = STM32F746xx
 AF_FILE = boards/stm32f746_af.csv
@@ -27,9 +28,12 @@ CFLAGS += -DBRISC_THREAD_MAX=6
 # CFLAGS += -fshort-enums -fsigned-char -mlittle-endian -mthumb -mthumb-interwork -mcpu=$(MCU_CORE) -mfloat-abi=$(MCU_FLOAT) -mfpu=$(MCU_FPU)
 # LDFLAGS += -fshort-enums -fsigned-char -mlittle-endian -mthumb -mthumb-interwork -mcpu=$(MCU_CORE) -mfloat-abi=$(MCU_FLOAT) -mfpu=$(MCU_FPU)
 
+CFLAGS += -I $(BOARD_DIR)
 CFLAGS += -I $(BRISCITS_SRC)/src
 CFLAGS += -I $(BRISCITS_SRC)/lib
 CFLAGS += -I $(BRISCITS_SRC)/cpu/arm/cortex-m7
+
+SRC_C += $(BOARD_DIR)/brisc_board.c
 
 SRC_C += $(BRISCITS_SRC)/src/brisc_sched.c
 SRC_C += $(BRISCITS_SRC)/src/brisc_irq.c

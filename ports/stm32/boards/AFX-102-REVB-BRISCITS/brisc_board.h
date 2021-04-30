@@ -9,6 +9,10 @@
 #include <core_cm7.h>
 #include <cpu.h>
 
+/* MicroPython PendSV and SysTick ISRs */
+extern void PendSV_Handler(void);
+extern void SysTick_Handler(void);
+
 extern void     board_init( void );
 extern uint32_t board_clkfreq( void );
 
