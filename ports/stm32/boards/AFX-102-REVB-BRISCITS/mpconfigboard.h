@@ -1,5 +1,6 @@
 #define MICROPY_HW_BOARD_NAME       "AFX-102-REVB-BRISCITS"
 #define MICROPY_HW_MCU_NAME         "STM32F746"
+#define MICROPY_HW_BRISCITS         (1)
 
 #define MICROPY_HW_HAS_SWITCH       (0)
 #define MICROPY_HW_HAS_FLASH        (1)

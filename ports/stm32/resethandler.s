@@ -24,54 +24,54 @@
  * THE SOFTWARE.
  */
 
-@ #if 0
+	.if 1
 
-@     .syntax unified
-@     .cpu cortex-m4
-@     .thumb
+    .syntax unified
+    .cpu cortex-m4
+    .thumb
 
-@     .section .text.Reset_Handler
-@     .global Reset_Handler
-@     .type Reset_Handler, %function
+    .section .text.Reset_Handler
+    .global Reset_Handler
+    .type Reset_Handler, %function
 
-@ Reset_Handler:
-@     /* Save the first argument to pass through to stm32_main */
-@     mov  r4, r0
+Reset_Handler:
+    /* Save the first argument to pass through to stm32_main */
+    mov  r4, r0
 
-@     /* Load the stack pointer */
-@     ldr  sp, =_estack
+    /* Load the stack pointer */
+    ldr  sp, =_estack
 
-@     /* Initialise the data section */
-@     ldr  r1, =_sidata
-@     ldr  r2, =_sdata
-@     ldr  r3, =_edata
-@     b    .data_copy_entry
-@ .data_copy_loop:
-@     ldr  r0, [r1], #4 /* Should be 4-aligned to be as fast as possible */
-@     str  r0, [r2], #4
-@ .data_copy_entry:
-@     cmp  r2, r3
-@     bcc  .data_copy_loop
+    /* Initialise the data section */
+    ldr  r1, =_sidata
+    ldr  r2, =_sdata
+    ldr  r3, =_edata
+    b    .data_copy_entry
+.data_copy_loop:
+    ldr  r0, [r1], #4 /* Should be 4-aligned to be as fast as possible */
+    str  r0, [r2], #4
+.data_copy_entry:
+    cmp  r2, r3
+    bcc  .data_copy_loop
 
-@     /* Zero out the BSS section */
-@     movs r0, #0
-@     ldr  r1, =_sbss
-@     ldr  r2, =_ebss
-@     b    .bss_zero_entry
-@ .bss_zero_loop:
-@     str  r0, [r1], #4 /* Should be 4-aligned to be as fast as possible */
-@ .bss_zero_entry:
-@     cmp  r1, r2
-@     bcc  .bss_zero_loop
+    /* Zero out the BSS section */
+    movs r0, #0
+    ldr  r1, =_sbss
+    ldr  r2, =_ebss
+    b    .bss_zero_entry
+.bss_zero_loop:
+    str  r0, [r1], #4 /* Should be 4-aligned to be as fast as possible */
+.bss_zero_entry:
+    cmp  r1, r2
+    bcc  .bss_zero_loop
 
-@     /* Initialise the system and jump to the main code */
-@     bl   SystemInit
-@     mov  r0, r4
-@     b    stm32_main
+    /* Initialise the system and jump to the main code */
+    bl   SystemInit
+    mov  r0, r4
+    b    stm32_main
 
-@     .size Reset_Handler, .-Reset_Handler
+    .size Reset_Handler, .-Reset_Handler
 
-@ #else
+	.else
 
 /******************************************************************************
  ________  ________  ___  ________  ________  ___  _________  ________      
@@ -196,5 +196,5 @@ UsageFault_IRQ_Handler:
 		.end
 
 
-@ #endif
+		.endif
 
