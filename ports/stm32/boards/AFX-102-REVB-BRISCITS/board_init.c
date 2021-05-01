@@ -5,5 +5,5 @@
 
 void AFX_102_REVB_PRISCITS_board_early_init(void) 
 {
-    board_init();
+    brisc_board_init();
 }

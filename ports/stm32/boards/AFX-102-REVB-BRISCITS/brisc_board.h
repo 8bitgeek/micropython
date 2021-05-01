@@ -13,7 +13,7 @@
 extern void PendSV_Handler(void);
 extern void SysTick_Handler(void);
 
-extern void     board_init( void );
-extern uint32_t board_clkfreq( void );
+extern void     brisc_board_init( void );
+extern uint32_t brisc_board_clkfreq( void );
 
 #endif

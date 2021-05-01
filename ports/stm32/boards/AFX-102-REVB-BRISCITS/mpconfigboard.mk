@@ -34,6 +34,10 @@ CFLAGS += -I $(BRISCITS_SRC)/lib
 CFLAGS += -I $(BRISCITS_SRC)/cpu/arm/cortex-m7
 
 SRC_C += $(BOARD_DIR)/brisc_board.c
+# SRC_C += $(BOARD_DIR)/examplemodule.c
+
+USERMOD_DIR=../../../MicroAMP/micropython_modules
+
 
 SRC_C += $(BRISCITS_SRC)/src/brisc_sched.c
 SRC_C += $(BRISCITS_SRC)/src/brisc_irq.c

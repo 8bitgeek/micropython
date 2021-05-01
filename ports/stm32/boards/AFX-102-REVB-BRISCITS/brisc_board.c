@@ -31,14 +31,13 @@ static void run_red  (void* arg);
 static void run_green(void* arg);
 static void run_blue (void* arg);
 
-uint32_t board_clkfreq( void )
+uint32_t brisc_board_clkfreq( void )
 {
     return SystemCoreClock;
 }
 
-void board_init(void) 
+void brisc_board_init(void) 
 {
-    b_int_enable();
     memset(&app_state,0,sizeof(app_state_t));
     if ( (main_thread_handle  = b_thread_init( "main" )) >= 0 )
     {
@@ -58,6 +57,7 @@ void board_init(void)
             }
         }
     }
+    b_int_enable();
 }
 
 static void run_red(void* arg)
