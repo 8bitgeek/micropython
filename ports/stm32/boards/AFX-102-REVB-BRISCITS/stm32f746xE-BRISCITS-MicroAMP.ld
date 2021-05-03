@@ -33,15 +33,15 @@ _heap_end = _sstack;
 /* Define the stack.  The stack is full descending so begins just above last byte
    of RAM.  Note that EABI requires the stack to be 8-byte aligned for a call. 
    BRISCITS: Reserve __main_stack_size__ for ISR stack */   
-_estack = ( ORIGIN(RAM) + LENGTH(RAM) ) - ( __microamp_shared_size__ + __main_stack_size__ + _estack_reserve );
+_estack = _ram_end - ( __microamp_shared_size__ + __main_stack_size__ + _estack_reserve );
 _sstack = _estack - 16K; /* tunable */
 
 /* BRISCITS: Calculate __main_stack base and end */
-__main_stack_end__ = ORIGIN(RAM) + LENGTH(RAM) - _estack_reserve;
+__main_stack_end__ = _ram_end - _estack_reserve;
 __main_stack_base__ = __main_stack_end__ - __main_stack_size__;
 
 /* MICROAMP: Calculate __microamp_shared_ram__ */
-__microamp_shared_ram__ = ORIGIN(RAM) + LENGTH(RAM) - ( __main_stack_base__ + __microamp_shared_size__ );
+__microamp_shared_ram__ = _ram_end - ( __main_stack_base__ + __microamp_shared_size__ );
 
 /* Memory layout for internal flash storage configuration:
 
