@@ -365,7 +365,9 @@ void stm32_main(uint32_t reset_mode) {
     HAL_InitTick(TICK_INT_PRIORITY);
 
     // set the system clock to be HSE
-    SystemClock_Config();
+    #if !defined(MICROPY_HW_BRISCITS)
+        SystemClock_Config();
+    #endif
 
     // enable GPIO clocks
     __HAL_RCC_GPIOA_CLK_ENABLE();

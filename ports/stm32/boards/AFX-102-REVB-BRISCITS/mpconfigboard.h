@@ -1,5 +1,8 @@
-#define MICROPY_HW_BOARD_NAME       "AFX-102-REVB"
+#define MICROPY_HW_BOARD_NAME       "AFX-102-REVB-BRISCITS"
 #define MICROPY_HW_MCU_NAME         "STM32F746"
+
+#define MICROPY_HW_BRISCITS         (1)
+#define USER_C_MODULES              (1)
 
 #define MICROPY_HW_HAS_SWITCH       (0)
 #define MICROPY_HW_HAS_FLASH        (1)
@@ -14,8 +17,8 @@
 #define MICROPY_PY_USOCKET          (0)
 #define MICROPY_PY_FRAMEBUF         (0)
 
-#define MICROPY_BOARD_EARLY_INIT    AFX_102_REVB_board_early_init
-void AFX_102_REVB_board_early_init(void);
+#define MICROPY_BOARD_EARLY_INIT    AFX_102_REVB_PRISCITS_board_early_init
+void AFX_102_REVB_PRISCITS_board_early_init(void);
 
 // HSE is 8MHz
 // VCOClock = HSE * PLLN / PLLM = 8 MHz * 216 / 4 = 432 MHz

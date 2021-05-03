@@ -81,7 +81,7 @@ else
 ifeq ($(MCU_SERIES),$(filter $(MCU_SERIES),f0 l0))
 CFLAGS_CORTEX_M += -msoft-float
 else
-CFLAGS_CORTEX_M += -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+CFLAGS_CORTEX_M += -mfpu=fpv4-sp-d16 -mfloat-abi=soft
 SUPPORTS_HARDWARE_FP_SINGLE = 1
 endif
 endif
@@ -123,13 +123,13 @@ CFLAGS += -fsingle-precision-constant
 endif
 endif
 
-LDFLAGS = -nostdlib -L $(LD_DIR) $(addprefix -T,$(LD_FILES)) -Map=$(@:.elf=.map) --cref
-LDFLAGS += --defsym=_estack_reserve=8
+LDFLAGS += -nostdlib -L $(LD_DIR) $(addprefix -T,$(LD_FILES)) -Wl,-Map=$(@:.elf=.map) -Wl,--cref 
+LDFLAGS += -Wl,--defsym=_estack_reserve=8
 LIBS = "$(shell $(CC) $(CFLAGS) -print-libgcc-file-name)"
 
 # Remove uncalled code from the final image.
 CFLAGS += -fdata-sections -ffunction-sections
-LDFLAGS += --gc-sections
+LDFLAGS += -Wl,--gc-sections
 
 # Debugging/Optimization
 ifeq ($(DEBUG), 1)
@@ -593,7 +593,7 @@ endef
 
 define GENERATE_ELF
 	$(ECHO) "LINK $(1)"
-	$(Q)$(LD) $(LDFLAGS) -o $(1) $(2) $(LDFLAGS_MOD) $(LIBS)
+	$(Q)$(CC) $(LDFLAGS) -o $(1) $(2) $(LDFLAGS_MOD) $(LIBS)
 	$(Q)$(SIZE) $(1)
 	$(if $(filter-out $(TEXT0_ADDR),0x08000000), \
 		$(ECHO) "INFO: this build requires mboot to be installed first")
