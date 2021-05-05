@@ -2,9 +2,12 @@ BOARD_DIR=$(PWD)/boards/$(BOARD)
 MCU_SERIES = f7
 CMSIS_MCU = STM32F746xx
 AF_FILE = boards/stm32f746_af.csv
-LD_FILES = boards/AFX-102-REVB-BRISCITS/stm32f746xE-BRISCITS-MicroAMP.ld
 TEXT0_ADDR = 0x08000000
 # TEXT1_ADDR = 0x08020000
+
+# Target Linker script and vectors.
+LD_FILES =$(BOARD_DIR)/stm32f746xE-BRISCITS-MicroAMP.ld
+STARTUP_FILE = $(BOARD_DIR)/startup_stm32f746xx.o
 
 # MicroPython settings
 MICROPY_PY_LWIP = 0
@@ -38,9 +41,9 @@ SRC_C += $(BOARD_DIR)/brisc_board.c
 
 USERMOD_DIR=../../../MicroAMP/micropython_modules
 
-
 SRC_C += $(BRISCITS_SRC)/src/brisc_sched.c
 SRC_C += $(BRISCITS_SRC)/src/brisc_irq.c
+SRC_C += $(BRISCITS_SRC)/src/brisc_swi.c
 SRC_C += $(BRISCITS_SRC)/src/brisc_thread.c
 SRC_C += $(BRISCITS_SRC)/src/brisc_mutex.c
 SRC_C += $(BRISCITS_SRC)/lib/brisc_delay.c

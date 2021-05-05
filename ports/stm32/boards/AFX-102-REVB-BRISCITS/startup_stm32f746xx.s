@@ -153,11 +153,11 @@ g_pfnVectors:
   .word  0
   .word  0
   .word  0
-  .word  SVC_Handler
+  .word  SVC_IRQ_Handler      /* SVC_Handler */
   .word  DebugMon_Handler
   .word  0
   .word  PendSV_IRQ_Handler   /* PendSV_Handler */
-  .word  SysTick_IRQ_Handler /* SysTick_Handler */
+  .word  SysTick_IRQ_Handler  /* SysTick_Handler */
 
   /* External Interrupts */
   .word     WWDG_IRQHandler                   /* Window WatchDog              */
