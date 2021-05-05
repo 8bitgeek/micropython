@@ -42,3 +42,9 @@
 [submodule "lib/pico-sdk"]
 	path = lib/pico-sdk
 	url = https://github.com/raspberrypi/pico-sdk.git
+[submodule "lib/briscits"]
+	path = lib/briscits
+	url = https://github.com/8bitgeek/briscits.git
+[submodule "lib/MicroAMP"]
+	path = lib/MicroAMP
+	url = https://github.com/8bitgeek/MicroAMP.git

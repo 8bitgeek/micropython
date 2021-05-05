@@ -1,4 +1,5 @@
-BOARD_DIR=$(PWD)/boards/$(BOARD)
+zBOARD_DIR=$(PWD)/boards/$(BOARD)
+LIB_DIR=$(PWD)/../../lib
 MCU_SERIES = f7
 CMSIS_MCU = STM32F746xx
 AF_FILE = boards/stm32f746_af.csv
@@ -16,13 +17,14 @@ MICROPY_SSL_MBEDTLS = 0
 
 
 # BRISCITS Setup
-BRISCITS_SRC=../../../briscits/
+BRISCITS_SRC=$(LIB_DIR)/briscits
 
 MCU_CHIP	 	= stm32f7xx
 MCU_CORE     	= cortex-m7
 MCU_FLOAT    	= softfp
 MCU_FPU 		= fpv4-sp-d16
 
+CFLAGS += -D__BRISCITS__
 CFLAGS += -DSTM32F746xx
 #CFLAGS += -DBRISC_THREAD_MAX=6 -DARM_FVP_LAZY_STACKING 
 CFLAGS += -DBRISC_THREAD_MAX=6
@@ -39,7 +41,7 @@ CFLAGS += -I $(BRISCITS_SRC)/cpu/arm/cortex-m7
 SRC_C += $(BOARD_DIR)/brisc_board.c
 # SRC_C += $(BOARD_DIR)/examplemodule.c
 
-USERMOD_DIR=../../../MicroAMP/micropython_modules
+USERMOD_DIR=$(LIB_DIR)/MicroAMP/micropython_modules
 
 SRC_C += $(BRISCITS_SRC)/src/brisc_sched.c
 SRC_C += $(BRISCITS_SRC)/src/brisc_irq.c
