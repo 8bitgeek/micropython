@@ -4,6 +4,9 @@
         "mphal.h": "c",
         "mphalport.h": "c",
         "mpconfig.h": "c",
-        "flash.h": "c"
+        "flash.h": "c",
+        "string.h": "c",
+        "microamp.h": "c",
+        "brisc_thread.h": "c"
     }
 }
