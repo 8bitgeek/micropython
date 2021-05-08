@@ -74,7 +74,7 @@ static void run_clock(void* arg)
     brisc_systick_t timeout_start=b_thread_systick();
     for(EVER)
     {
-        if ( b_thread_systick() - timeout_start >= 1000 )
+        if ( b_thread_systick() - timeout_start >= 10 )
         {
             timeout_start=b_thread_systick();
             if ( app_state.clock_microamp_handle >= 0 )

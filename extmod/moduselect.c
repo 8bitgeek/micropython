@@ -40,6 +40,10 @@
 // Flags for poll()
 #define FLAG_ONESHOT (1)
 
+#if defined(__MICROAMP__)
+    extern void microamp_poll_hook(void);
+#endif
+
 /// \module select - Provides select function to wait for events on a stream
 ///
 /// This module provides the select function.
@@ -248,6 +252,9 @@ STATIC mp_uint_t poll_poll_internal(uint n_args, const mp_obj_t *args) {
     mp_uint_t start_tick = mp_hal_ticks_ms();
     mp_uint_t n_ready;
     for (;;) {
+        #if defined(__MICROAMP__)
+            microamp_poll_hook();
+        #endif
         // poll the objects
         n_ready = poll_map_poll(&self->poll_map, NULL);
         if (n_ready > 0 || (timeout != (mp_uint_t)-1 && mp_hal_ticks_ms() - start_tick >= timeout)) {
