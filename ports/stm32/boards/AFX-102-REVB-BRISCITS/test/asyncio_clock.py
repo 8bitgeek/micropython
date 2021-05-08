@@ -1,8 +1,6 @@
 import uasyncio as asyncio
 import microamp as amp
 
-tm=b'\x00\x00\x00\x00\x00\x00\x00\x00'
-
 async def clock():
     if amp.endpoint_indexof("clock") >= 0:
         print(amp.endpoint_count())
@@ -11,10 +9,11 @@ async def clock():
             while True:
                 avail = amp.channel_avail(fd)
                 if avail > 0:
-                    print(avail)
-                    if amp.channel_read(fd,tm,avail) >= 0:
-                        print(tm)
-                await asyncio.sleep_us(10);
+                    buf=b'\x00\x00\x00\x00'
+                    if amp.channel_read(fd,buf,4) >= 0:
+                        b = list(buf)
+                        print(b[0] | b[1]<<8 | b[2]<<16 | b[3]<<24)
+                await asyncio.sleep_ms(1)
 
 
 asyncio.run(clock())
