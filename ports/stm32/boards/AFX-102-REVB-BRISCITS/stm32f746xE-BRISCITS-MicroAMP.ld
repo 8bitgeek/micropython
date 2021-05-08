@@ -62,7 +62,7 @@ _minimum_heap_size = 16K;
 /***************************************************************************/
 /* MICROAMP: Calculate __microamp_shared_ram__                             */
 /***************************************************************************/
-__microamp_page_size__      = 4K;
+__microamp_page_size__      = 1K;
 __microamp_shared_ram__     = ORIGIN(UAMP);
 __microamp_shared_size__    = (ORIGIN(UAMP) + LENGTH(UAMP)) - 
                                 __microamp_shared_ram__;

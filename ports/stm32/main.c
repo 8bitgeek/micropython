@@ -315,7 +315,9 @@ void stm32_main(uint32_t reset_mode) {
 
     // Hook for a board to run code at start up, for example check if a
     // bootloader should be entered instead of the main application.
-    MICROPY_BOARD_STARTUP();
+    #if !defined(MICROPY_HW_BRISCITS)
+        MICROPY_BOARD_STARTUP();
+    #endif
 
     // Enable caches and prefetch buffers
 
@@ -614,6 +616,15 @@ soft_reset:
     #endif
 
     // At this point everything is fully configured and initialised.
+
+    // Hook for a board to run code at start up, for example check if a
+    // bootloader should be entered instead of the main application.
+    #if defined(MICROPY_HW_BRISCITS)
+        // @NOTE Maybe this should be a different init?
+        // board init should be much earlier?
+        // we want lateer init for briscits, etc, malloc and such.
+        MICROPY_BOARD_STARTUP();
+    #endif
 
     MICROPY_BOARD_BEFORE_MAIN_PY(&state);
 

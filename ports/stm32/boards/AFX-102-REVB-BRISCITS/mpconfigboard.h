@@ -60,7 +60,7 @@ void AFX_102_REVB_PRISCITS_board_early_init(void);
 #define MICROPY_HW_LED_OFF(pin)     (mp_hal_pin_low(pin))
 
 // SDRAM
-#define MICROPY_HW_SDRAM_SIZE  (16 / 8 * 1024 * 1024)  // 16 Mbit
+#define MICROPY_HW_SDRAM_SIZE  ((16 / 8) * 1024 * 1024)  // 16 Mbit
 #define MICROPY_HW_SDRAM_STARTUP_TEST             (1)
 #define MICROPY_HEAP_START              sdram_start()
 #define MICROPY_HEAP_END                sdram_end()
