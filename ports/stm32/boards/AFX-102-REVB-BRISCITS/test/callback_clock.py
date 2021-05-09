@@ -20,6 +20,7 @@ if amp.endpoint_indexof("clock") >= 0:
 # just doing some busy work here.
 async def busy():
     while True:
-        await asyncio.sleep_ms(100)
+        await asyncio.sleep_ms(1000)
+        gc.collect()
 
 asyncio.run(busy())
