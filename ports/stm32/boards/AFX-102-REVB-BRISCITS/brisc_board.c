@@ -11,9 +11,10 @@
 #define APP_CLOCK_ENDPOINT    "clock"
 #define APP_CLOCK_SHM         128
 
-#define APP_EZBUS_TASK          "ezbus"
-#define APP_EZBUS_ENDPOINT      "ezbus0"
-#define APP_EZBUS_SHM           512
+#define APP_ECHO_TASK          "echo"
+#define APP_ECHO_ENDPOINT0     "echo0"
+#define APP_ECHO_ENDPOINT1     "echo1"
+#define APP_ECHO_SHM           256
 
 #define EVER            ;;
 #define STACK_BYTES     (1024)
@@ -21,16 +22,17 @@
 
 typedef struct _app_state_ {
 
-    cpu_reg_t clock_stack   [ STACK_WORDS ];
-    cpu_reg_t ezbus_stack   [ STACK_WORDS ];
+    cpu_reg_t clock_stack [ STACK_WORDS ];
+    cpu_reg_t echo_stack  [ STACK_WORDS ];
 
     int main_thread_handle;
 
     int clock_thread_handle;
     int clock_microamp_handle;
     
-    int ezbus_thread_handle;
-    int ezbus_microamp_handle;
+    int echo_thread_handle;
+    int echo_microamp_handle0;
+    int echo_microamp_handle1;
  
     microamp_state_t microamp;
 
@@ -39,7 +41,7 @@ typedef struct _app_state_ {
 app_state_t app_state;
 
 static void run_clock  (void* arg);
-static void run_ezbus(void* arg);
+static void run_echo(void* arg);
 
 uint32_t brisc_board_clkfreq( void )
 {
@@ -57,15 +59,19 @@ void brisc_board_init(void)
 
         if ( (app_state.clock_thread_handle = b_thread_create( APP_CLOCK_TASK, run_clock, NULL, app_state.clock_stack, STACK_WORDS )) >= 0)
         {
-            if ( (app_state.ezbus_thread_handle = b_thread_create( APP_EZBUS_TASK, run_ezbus, NULL, app_state.ezbus_stack, STACK_WORDS )) >= 0)
+            if ( (app_state.echo_thread_handle = b_thread_create( APP_ECHO_TASK, run_echo, NULL, app_state.echo_stack, STACK_WORDS )) >= 0)
             {
                 b_thread_start( app_state.clock_thread_handle );
-                b_thread_start( app_state.ezbus_thread_handle );
+                b_thread_start( app_state.echo_thread_handle );
             }
         }
     }
     b_int_enable();
 }
+
+/** *************************************************************************  
+******************************** Clock Service *******************************
+****************************************************************************/
 
 static void run_clock(void* arg)
 {
@@ -88,17 +94,42 @@ static void run_clock(void* arg)
     }
 }
 
-static void run_ezbus(void* arg)
+
+
+/** *************************************************************************  
+******************************** Echo Service *******************************
+****************************************************************************/
+
+static void echo_dataready_event(void* arg);
+
+static char* echo_data_write = ">All good men come to the aid of their country";
+static char* echo_data_read[256];
+static int echo_data_len = 0;
+
+static void run_echo(void* arg)
 {
-    brisc_systick_t timeout_start=b_thread_systick();
-    microamp_create(&app_state.microamp,APP_EZBUS_ENDPOINT,APP_EZBUS_SHM);
-    app_state.ezbus_microamp_handle = microamp_open(&app_state.microamp,APP_EZBUS_ENDPOINT);
+    echo_data_len = strlen(echo_data_write);
+    
+    microamp_create(&app_state.microamp,APP_ECHO_ENDPOINT0,APP_ECHO_SHM);
+    microamp_create(&app_state.microamp,APP_ECHO_ENDPOINT1,APP_ECHO_SHM);
+    
+    app_state.echo_microamp_handle0 = microamp_open(&app_state.microamp,APP_ECHO_ENDPOINT0);
+    app_state.echo_microamp_handle1 = microamp_open(&app_state.microamp,APP_ECHO_ENDPOINT1);
+    
+    microamp_dataready_handler(&app_state.microamp,app_state.echo_microamp_handle1,echo_dataready_event,&app_state);
+
+    microamp_write(&app_state.microamp,app_state.echo_microamp_handle0,echo_data_write,echo_data_len);
+
     for(EVER)
     {
-        if ( b_thread_systick() - timeout_start >= 1 )
-        {
-            timeout_start=b_thread_systick();
-        }
         b_thread_yield();
     }
+}
+
+static void echo_dataready_event(void* arg)
+{
+    app_state_t* app_state = (app_state_t*)arg;
+    while ( microamp_read(&app_state->microamp,app_state->echo_microamp_handle1,echo_data_read,echo_data_len) > 0 )
+        b_thread_yield();
+    microamp_write(&app_state->microamp,app_state->echo_microamp_handle0,echo_data_write,echo_data_len);
 }
