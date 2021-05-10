@@ -102,7 +102,7 @@ static void run_clock(void* arg)
 
 static void echo_dataready_event(void* arg);
 
-static char* echo_data_write = ">All good men come to the aid of their country";
+static char* echo_data_write = ">";
 static char* echo_data_read[256];
 static int echo_data_len = 0;
 
