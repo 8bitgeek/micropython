@@ -304,7 +304,8 @@ STATIC bool init_sdcard_fs(void) {
 }
 #endif
 
-void stm32_main(uint32_t reset_mode) {
+int main(int argc, char*argv[]) {
+    uint32_t reset_mode = argc;
     #if !defined(STM32F0) && defined(MICROPY_HW_VTOR)
     // Change IRQ vector table if configured differently
     SCB->VTOR = MICROPY_HW_VTOR;
@@ -339,9 +340,11 @@ void stm32_main(uint32_t reset_mode) {
     __HAL_FLASH_ART_ENABLE();
     #endif
 
-    SCB_EnableICache();
-    SCB_EnableDCache();
-
+    #if !defined(MICROPY_HW_BRISCITS)
+        SCB_EnableICache();
+        SCB_EnableDCache();
+    #endif
+    
     #elif defined(STM32L4)
 
     #if !INSTRUCTION_CACHE_ENABLE
@@ -700,4 +703,6 @@ soft_reset_exit:
     gc_sweep_all();
 
     goto soft_reset;
+
+    return 0;
 }

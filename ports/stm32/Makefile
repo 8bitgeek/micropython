@@ -362,7 +362,7 @@ SRC_O += \
 else
 SRC_O += \
 	system_stm32.o \
-	resethandler.o \
+	$(STARTUP_FILE) \
 	lib/utils/gchelper_m3.o
 endif
 endif

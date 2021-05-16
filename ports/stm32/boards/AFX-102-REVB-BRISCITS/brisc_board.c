@@ -9,7 +9,7 @@
 
 #define APP_CLOCK_TASK        "clock"
 #define APP_CLOCK_ENDPOINT    "clock"
-#define APP_CLOCK_SHM         128
+#define APP_CLOCK_SHM         256
 
 #define APP_ECHO_TASK          "echo"
 #define APP_ECHO_ENDPOINT0     "echo0"
@@ -48,6 +48,12 @@ uint32_t brisc_board_clkfreq( void )
     return SystemCoreClock;
 }
 
+/* get here before main() */
+void board_init()
+{
+}
+
+/* get here after main() */
 void brisc_board_init(void) 
 {
     memset(&app_state,0,sizeof(app_state_t));

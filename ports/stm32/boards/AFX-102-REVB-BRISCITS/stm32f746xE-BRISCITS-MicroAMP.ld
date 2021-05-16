@@ -27,7 +27,7 @@ SOFTWARE.
 /***************************************************************************/
 /* Stack Size For ARM Interrupt Context                                    */
 /***************************************************************************/
-__main_stack_size__         = 2K;
+__main_stack_size__         = 8K;
 
 MEMORY
 {
@@ -84,7 +84,7 @@ _heap_end = _sstack;
 /***************************************************************************/
 _estack = _ram_end - ( __microamp_shared_size__ + 
                         __main_stack_size__ + _estack_reserve );
-_sstack = _estack - 16K; /* tunable */
+_sstack = _estack - 24K; /* tunable */
 
 /***************************************************************************/
 /* BRISCITS: Calculate __main_stack base and end                           */
@@ -94,7 +94,7 @@ __main_stack_base__ = __main_stack_end__ - __main_stack_size__;
 
 /* Memory layout for internal flash storage configuration:
 
-    FLASH_ISR   .isr_vector
+    FLASH_ISR   .vectors
 
     FLASH_TEXT  .text
     FLASH_TEXT  .data
@@ -105,7 +105,7 @@ __main_stack_base__ = __main_stack_end__ - __main_stack_size__;
     RAM         .stack
 */
 
-ENTRY(Reset_Handler)
+ENTRY(briscits_reset_handler)
 
 /***************************************************************************/
 /* define output sections                                                  */
@@ -113,10 +113,10 @@ ENTRY(Reset_Handler)
 SECTIONS
 {
     /* The startup code goes first into FLASH */
-    .isr_vector :
+    .vectors :
     {
         . = ALIGN(4);
-        KEEP(*(.isr_vector)) /* Startup code */
+        KEEP(*(.vectors)) /* Startup code */
 
         /* This first flash block is 16K annd the isr vectors only take up
            about 400 bytes. So we pull in a couple of object files to pad it
@@ -124,7 +124,7 @@ SECTIONS
 
         . = ALIGN(4);
 
-        /* NOTE: If you update the list of files contained in .isr_vector,
+        /* NOTE: If you update the list of files contained in .vectors,
                  then be sure to also update smhal/Makefile where it forcibly
            builds each of these files with -Os */
 

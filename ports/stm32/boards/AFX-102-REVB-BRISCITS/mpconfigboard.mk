@@ -8,7 +8,7 @@ TEXT0_ADDR = 0x08000000
 
 # Target Linker script and vectors.
 LD_FILES =$(BOARD_DIR)/stm32f746xE-BRISCITS-MicroAMP.ld
-STARTUP_FILE = $(BOARD_DIR)/startup_stm32f746xx.o
+# STARTUP_FILE = $(BOARD_DIR)/startup_stm32f746xx.o
 
 # MicroPython settings
 MICROPY_PY_LWIP = 0
@@ -18,6 +18,8 @@ MICROPY_SSL_MBEDTLS = 0
 
 # BRISCITS Setup
 BRISCITS_SRC=$(LIB_DIR)/briscits
+STARTUP_FILE = $(BRISCITS_SRC)/chip/stm32/f7/stm32f746xe/vectors.o	\
+				$(BRISCITS_SRC)/chip/stm32/f7/boot.o
 
 MCU_CHIP	 	= stm32f7xx
 MCU_CORE     	= cortex-m7
