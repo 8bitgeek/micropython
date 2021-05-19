@@ -53,13 +53,14 @@ SOFTWARE.
 
         .global default_interrupt_handler
         .global debug_interrupt_handler
-        .global briscits_reset_handler
-        .type	briscits_reset_handler, %function
+        .global Reset_Handler
+
+        .type	Reset_Handler, %function
         .code   16
         .align 	2
         .thumb_func
 
-briscits_reset_handler:
+Reset_Handler:
         cpsid	i		        // disable interrupts
 
         ldr	r0,=_estack             // get the process stack
@@ -81,7 +82,23 @@ start:
 		bl      main            // call program entry main()
 		bl      _cpp_deinit     // Call destructors
         b       start                   // loop forever.
-		
+
+.size   Reset_Handler, .-Reset_Handler
+
+/**
+ * @brief  This is the code that gets called when the processor receives an
+ *         unexpected interrupt.  This simply enters an infinite loop, preserving
+ *         the system state for examination by a debugger.
+ *
+ * @param  None
+ * @retval : None
+*/
+    .section    .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+        b               Infinite_Loop
+    .size   Default_Handler, .-Default_Handler
+
 exit:
 _exit:
 _halt:

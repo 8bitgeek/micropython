@@ -108,7 +108,7 @@ _heap_end = _sstack;
     RAM         .stack
 */
 
-ENTRY(briscits_reset_handler)
+ENTRY(Reset_Handler)
 
 /***************************************************************************/
 /* define output sections                                                  */
