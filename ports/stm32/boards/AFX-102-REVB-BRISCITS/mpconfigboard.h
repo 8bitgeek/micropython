@@ -17,8 +17,8 @@
 #define MICROPY_PY_USOCKET          (0)
 #define MICROPY_PY_FRAMEBUF         (0)
 
-#define MICROPY_BOARD_EARLY_INIT    AFX_102_REVB_PRISCITS_board_early_init
-void AFX_102_REVB_PRISCITS_board_early_init(void);
+#define MICROPY_BOARD_EARLY_INIT    /* AFX_102_REVB_PRISCITS_board_early_init */
+/* void AFX_102_REVB_PRISCITS_board_early_init(void); */
 
 // HSE is 8MHz
 // VCOClock = HSE * PLLN / PLLM = 8 MHz * 216 / 4 = 432 MHz

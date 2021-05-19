@@ -19,28 +19,36 @@
 #define EVER            ;;
 #define STACK_BYTES     (1024)
 #define STACK_WORDS     STACK_BYTES / sizeof(cpu_reg_t)
+#define STM32_MAIN_STACK_WORDS ((1024*4) / sizeof(cpu_reg_t))
 
 typedef struct _app_state_ {
 
+    cpu_reg_t stm32_main_stack[ STM32_MAIN_STACK_WORDS ];
     cpu_reg_t clock_stack [ STACK_WORDS ];
     cpu_reg_t echo_stack  [ STACK_WORDS ];
 
     int main_thread_handle;
+    int stm32_main_thread_handle;
 
     int clock_thread_handle;
     int clock_microamp_handle;
-    
+
     int echo_thread_handle;
     int echo_microamp_handle0;
     int echo_microamp_handle1;
  
+
     microamp_state_t microamp;
 
 } app_state_t;
 
 app_state_t app_state;
 
-static void run_clock  (void* arg);
+cpu_reg_t sstack = 0;                         
+cpu_reg_t estack = 0;
+
+extern void stm32_main(void* arg);
+static void run_clock(void* arg);
 static void run_echo(void* arg);
 
 uint32_t brisc_board_clkfreq( void )
@@ -48,9 +56,21 @@ uint32_t brisc_board_clkfreq( void )
     return SystemCoreClock;
 }
 
+int main(int argc,char** argv)
+{
+    for(;;)
+    {
+        microamp_poll_hook();
+        b_thread_yield();
+    }
+}
+
 /* get here before main() */
 void board_init()
 {
+    brisc_board_init();
+    
+    b_int_enable();
 }
 
 /* get here after main() */
@@ -58,6 +78,10 @@ void brisc_board_init(void)
 {
     memset(&app_state,0,sizeof(app_state_t));
     microamp_init(&app_state.microamp);
+
+    sstack = (cpu_reg_t)&app_state.stm32_main_stack[0];                         
+    estack = (cpu_reg_t)&app_state.stm32_main_stack[STM32_MAIN_STACK_WORDS];
+
     if ( (app_state.main_thread_handle  = b_thread_init( "main" )) >= 0 )
     {
         b_thread_set_systick_fn( SysTick_Handler );
@@ -67,12 +91,15 @@ void brisc_board_init(void)
         {
             if ( (app_state.echo_thread_handle = b_thread_create( APP_ECHO_TASK, run_echo, NULL, app_state.echo_stack, STACK_WORDS )) >= 0)
             {
-                b_thread_start( app_state.clock_thread_handle );
-                b_thread_start( app_state.echo_thread_handle );
+                if ( (app_state.stm32_main_thread_handle = b_thread_create( "stm32main", stm32_main, NULL, app_state.stm32_main_stack, STM32_MAIN_STACK_WORDS )) >= 0)
+                {
+                    b_thread_start( app_state.stm32_main_thread_handle );
+                    b_thread_start( app_state.clock_thread_handle );
+                    b_thread_start( app_state.echo_thread_handle );
+                }
             }
         }
     }
-    b_int_enable();
 }
 
 /** *************************************************************************  
@@ -99,8 +126,6 @@ static void run_clock(void* arg)
         b_thread_yield();
     }
 }
-
-
 
 /** *************************************************************************  
 ******************************** Echo Service *******************************

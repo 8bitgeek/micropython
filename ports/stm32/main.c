@@ -84,6 +84,11 @@
 #include "can.h"
 #include "modnetwork.h"
 
+#if defined(MICROPY_HW_BRISCITS)
+    extern uint32_t estack;
+    extern uint32_t sstack;
+#endif
+
 #if MICROPY_PY_THREAD
 STATIC pyb_thread_t pyb_thread_main;
 #endif
@@ -304,8 +309,12 @@ STATIC bool init_sdcard_fs(void) {
 }
 #endif
 
+#if 0
 int main(int argc, char*argv[]) {
-    uint32_t reset_mode = argc;
+#else
+void stm32_main(void* arg) {
+#endif
+    uint32_t reset_mode = 0;
     #if !defined(STM32F0) && defined(MICROPY_HW_VTOR)
     // Change IRQ vector table if configured differently
     SCB->VTOR = MICROPY_HW_VTOR;
@@ -367,7 +376,9 @@ int main(int argc, char*argv[]) {
     #endif
 
     // SysTick is needed by HAL_RCC_ClockConfig (called in SystemClock_Config)
-    HAL_InitTick(TICK_INT_PRIORITY);
+    #if !defined(MICROPY_HW_BRISCITS)
+        HAL_InitTick(TICK_INT_PRIORITY);
+    #endif
 
     // set the system clock to be HSE
     #if !defined(MICROPY_HW_BRISCITS)
@@ -398,7 +409,9 @@ int main(int argc, char*argv[]) {
     __HAL_RCC_D2SRAM3_CLK_ENABLE();
     #endif
 
-    MICROPY_BOARD_EARLY_INIT();
+    #if !defined(MICROPY_HW_BRISCITS)
+        MICROPY_BOARD_EARLY_INIT();
+    #endif
 
     // basic sub-system init
     #if defined(STM32WB)
@@ -491,11 +504,24 @@ soft_reset:
     mp_thread_init();
     #endif
 
-    // Stack limit should be less than real stack size, so we have a chance
-    // to recover from limit hit.  (Limit is measured in bytes.)
-    // Note: stack control relies on main thread being initialised above
-    mp_stack_set_top(&_estack);
-    mp_stack_set_limit((char *)&_estack - (char *)&_sstack - 1024);
+
+    #if defined(MICROPY_HW_BRISCITS)
+
+        // Stack limit should be less than real stack size, so we have a chance
+        // to recover from limit hit.  (Limit is measured in bytes.)
+        // Note: stack control relies on main thread being initialised above
+        mp_stack_set_top((char*)estack);
+        mp_stack_set_limit((char *)estack - (char *)sstack - 1024);
+
+    #else
+
+        // Stack limit should be less than real stack size, so we have a chance
+        // to recover from limit hit.  (Limit is measured in bytes.)
+        // Note: stack control relies on main thread being initialised above
+        mp_stack_set_top(&_estack);
+        mp_stack_set_limit((char *)&_estack - (char *)&_sstack - 1024);
+
+    #endif
 
     // GC init
     gc_init(MICROPY_HEAP_START, MICROPY_HEAP_END);
@@ -704,5 +730,5 @@ soft_reset_exit:
 
     goto soft_reset;
 
-    return 0;
+    // return 0;
 }

@@ -41,7 +41,7 @@
 #define FLAG_ONESHOT (1)
 
 #if defined(__MICROAMP__)
-    extern void microamp_poll_hook(void);
+    extern void py_microamp_poll_hook(void);
 #endif
 
 /// \module select - Provides select function to wait for events on a stream
@@ -253,7 +253,7 @@ STATIC mp_uint_t poll_poll_internal(uint n_args, const mp_obj_t *args) {
     mp_uint_t n_ready;
     for (;;) {
         #if defined(__MICROAMP__)
-            microamp_poll_hook();
+            py_microamp_poll_hook();
         #endif
         // poll the objects
         n_ready = poll_map_poll(&self->poll_map, NULL);

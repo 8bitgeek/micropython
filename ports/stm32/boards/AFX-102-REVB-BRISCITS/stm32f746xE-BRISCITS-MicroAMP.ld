@@ -27,7 +27,7 @@ SOFTWARE.
 /***************************************************************************/
 /* Stack Size For ARM Interrupt Context                                    */
 /***************************************************************************/
-__main_stack_size__         = 8K;
+__main_stack_size__         = 4K;
 
 MEMORY
 {
@@ -56,7 +56,7 @@ MEMORY
 /* produce a link error if there is not this amount of RAM for these       */
 /* sections                                                                */
 /***************************************************************************/
-_minimum_stack_size = 2K;
+_minimum_stack_size = 8K;
 _minimum_heap_size = 16K;
 
 /***************************************************************************/
@@ -70,27 +70,30 @@ __microamp_pages__          = __microamp_shared_size__ /
                                  __microamp_page_size__;
 
 /***************************************************************************/
-/* RAM extents for the garbage collector                                   */
+/* RAM extents                                                             */
 /***************************************************************************/
 _ram_start = ORIGIN(RAM);
 _ram_end = ORIGIN(RAM) + LENGTH(RAM);
-_heap_start = _ebss; /* heap starts just after statically allocated memory */
-_heap_end = _sstack;
+
+/***************************************************************************/
+/* BRISCITS: Calculate __main_stack base and end for MSP                   */
+/***************************************************************************/
+__main_stack_end__ = _ram_end ;
+__main_stack_base__ = __main_stack_end__ - __main_stack_size__;
 
 /***************************************************************************/
 /* Define the stack.  The stack is full descending so begins just above    */
 /* last byte of RAM. Note that EABI requires the stack to be 8-byte        */
-/* aligned for a call. BRISCITS: Reserve __main_stack_size__ for ISR stack */   
+/* aligned for a call.                                                     */   
 /***************************************************************************/
-_estack = _ram_end - ( __microamp_shared_size__ + 
-                        __main_stack_size__ + _estack_reserve );
-_sstack = _estack - 24K; /* tunable */
+_estack = ( __main_stack_base__ - _estack_reserve );
+_sstack = _estack - 16K; /* tunable */
 
 /***************************************************************************/
-/* BRISCITS: Calculate __main_stack base and end                           */
+/* RAM extents for the garbage collector                                   */
 /***************************************************************************/
-__main_stack_end__ = _ram_end - _estack_reserve;
-__main_stack_base__ = __main_stack_end__ - __main_stack_size__;
+_heap_start = _ebss; /* heap starts just after statically allocated memory */
+_heap_end = _sstack;
 
 /* Memory layout for internal flash storage configuration:
 

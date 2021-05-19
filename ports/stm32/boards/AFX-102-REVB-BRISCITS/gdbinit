@@ -9,5 +9,5 @@ winheight src 24
 target remote localhost:3333
 load build-AFX-102-REVB-BRISCITS/firmware.elf
 file build-AFX-102-REVB-BRISCITS/firmware.elf
-break board_init
+break main
 continue
