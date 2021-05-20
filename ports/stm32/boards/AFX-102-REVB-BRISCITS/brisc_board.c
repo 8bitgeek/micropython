@@ -4,8 +4,8 @@
 #include <xprintf.h>
 #include <systick.h>
 #include <microamp.h>
-
 #include <string.h>
+#include <brisc_interface.h>
 
 #define APP_CLOCK_TASK        "clock"
 #define APP_CLOCK_ENDPOINT    "clock"
@@ -20,6 +20,7 @@
 #define STACK_BYTES     (1024)
 #define STACK_WORDS     STACK_BYTES / sizeof(cpu_reg_t)
 #define STM32_MAIN_STACK_WORDS ((1024*4) / sizeof(cpu_reg_t))
+#define STM32_MAIN_LOW_STACK_LIMIT (1024)
 
 typedef struct _app_state_ {
 
@@ -37,27 +38,25 @@ typedef struct _app_state_ {
     int echo_microamp_handle0;
     int echo_microamp_handle1;
  
-
     microamp_state_t microamp;
-
+    brisc_interface_t brisc_interface;
 } app_state_t;
 
 app_state_t app_state;
-
-cpu_reg_t sstack = 0;                         
-cpu_reg_t estack = 0;
 
 extern void stm32_main(void* arg);
 static void run_clock(void* arg);
 static void run_echo(void* arg);
 
-uint32_t brisc_board_clkfreq( void )
+uint32_t board_clkfreq( void )
 {
     return SystemCoreClock;
 }
 
 int main(int argc,char** argv)
 {
+    b_int_enable();
+
     for(;;)
     {
         microamp_poll_hook();
@@ -65,39 +64,36 @@ int main(int argc,char** argv)
     }
 }
 
-/* get here before main() */
-void board_init()
-{
-    brisc_board_init();
-    
-    b_int_enable();
-}
-
 /* get here after main() */
-void brisc_board_init(void) 
+void board_init(void) 
 {
     memset(&app_state,0,sizeof(app_state_t));
     microamp_init(&app_state.microamp);
 
-    sstack = (cpu_reg_t)&app_state.stm32_main_stack[0];                         
-    estack = (cpu_reg_t)&app_state.stm32_main_stack[STM32_MAIN_STACK_WORDS];
-
     if ( (app_state.main_thread_handle  = b_thread_init( "main" )) >= 0 )
     {
+        /* Set up the micropython systick and pendsv callbacks */
         b_thread_set_systick_fn( SysTick_Handler );
         b_thread_set_yield_fn( PendSV_Handler );
 
-        if ( (app_state.clock_thread_handle = b_thread_create( APP_CLOCK_TASK, run_clock, NULL, app_state.clock_stack, STACK_WORDS )) >= 0)
+        /* Set up the micropython interface parameters */
+        app_state.brisc_interface.sstack = (cpu_reg_t)&app_state.stm32_main_stack[0];                         
+        app_state.brisc_interface.estack = (cpu_reg_t)&app_state.stm32_main_stack[STM32_MAIN_STACK_WORDS];
+        app_state.brisc_interface.low_stack_limit = STM32_MAIN_LOW_STACK_LIMIT;
+
+        if ( (app_state.stm32_main_thread_handle = b_thread_create( "uPython", stm32_main, &app_state.brisc_interface, app_state.stm32_main_stack, STM32_MAIN_STACK_WORDS )) >= 0)
         {
-            if ( (app_state.echo_thread_handle = b_thread_create( APP_ECHO_TASK, run_echo, NULL, app_state.echo_stack, STACK_WORDS )) >= 0)
+
+            if ( (app_state.clock_thread_handle = b_thread_create( APP_CLOCK_TASK, run_clock, NULL, app_state.clock_stack, STACK_WORDS )) >= 0)
             {
-                if ( (app_state.stm32_main_thread_handle = b_thread_create( "stm32main", stm32_main, NULL, app_state.stm32_main_stack, STM32_MAIN_STACK_WORDS )) >= 0)
+                if ( (app_state.echo_thread_handle = b_thread_create( APP_ECHO_TASK, run_echo, NULL, app_state.echo_stack, STACK_WORDS )) >= 0)
                 {
                     b_thread_start( app_state.stm32_main_thread_handle );
                     b_thread_start( app_state.clock_thread_handle );
                     b_thread_start( app_state.echo_thread_handle );
                 }
             }
+
         }
     }
 }

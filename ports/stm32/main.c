@@ -85,8 +85,7 @@
 #include "modnetwork.h"
 
 #if defined(MICROPY_HW_BRISCITS)
-    extern uint32_t estack;
-    extern uint32_t sstack;
+    #include <brisc_interface.h>
 #endif
 
 #if MICROPY_PY_THREAD
@@ -510,9 +509,18 @@ soft_reset:
         // Stack limit should be less than real stack size, so we have a chance
         // to recover from limit hit.  (Limit is measured in bytes.)
         // Note: stack control relies on main thread being initialised above
-        mp_stack_set_top((char*)estack);
-        mp_stack_set_limit((char *)estack - (char *)sstack - 1024);
-
+        // mp_stack_set_top((char*)estack);
+        // mp_stack_set_limit((char *)estack - (char *)sstack - 1024);
+        brisc_interface_t* brisc_interface = (brisc_interface_t*)arg;
+        if ( brisc_interface )
+        {
+            mp_stack_set_top((char*)brisc_interface->estack);
+            mp_stack_set_limit((char *)brisc_interface->estack - (char *)brisc_interface->sstack - 1024);
+        }
+        else
+        {
+            mp_printf(&mp_plat_print, "no brisc interface\n");
+        }
     #else
 
         // Stack limit should be less than real stack size, so we have a chance

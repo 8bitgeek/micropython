@@ -49,7 +49,6 @@ SOFTWARE.
 
         .global UsageFault_IRQ_Handler
         .global BusFault_IRQ_Handler
-        .global _hard_fault
 
         .global default_interrupt_handler
         .global debug_interrupt_handler
@@ -108,8 +107,5 @@ UsageFault_IRQ_Handler:
 
 default_interrupt_handler:
         b               default_interrupt_handler
-
-_hard_fault:
-        b 		_hard_fault
 
         .end

@@ -20,6 +20,7 @@ MICROPY_SSL_MBEDTLS = 0
 BRISCITS_SRC=$(LIB_DIR)/briscits
 STARTUP_FILE = $(BOARD_DIR)/vectors.o	\
 				$(BOARD_DIR)/boot.o
+				
 
 MCU_CHIP	 	= stm32f7xx
 MCU_CORE     	= cortex-m7
@@ -41,7 +42,7 @@ CFLAGS += -I $(BRISCITS_SRC)/lib
 CFLAGS += -I $(BRISCITS_SRC)/cpu/arm/cortex-m7
 
 SRC_C += $(BOARD_DIR)/brisc_board.c
-# SRC_C += $(BOARD_DIR)/examplemodule.c
+SRC_C += $(BOARD_DIR)/cortex_fault.c
 
 USERMOD_DIR=$(LIB_DIR)/MicroAMP/micropython_modules
 
