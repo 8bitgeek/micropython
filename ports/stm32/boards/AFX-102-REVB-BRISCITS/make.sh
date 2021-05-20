@@ -14,6 +14,7 @@ elif [ "$1" == "debug" ]; then
 
 elif [ "$1" == "flash" ]; then
 
+    killall openocd
     make BOARD=AFX-102-REVB-BRISCITS OPENOCD_CONFIG=boards/openocd_stm32f7.cfg  deploy-openocd
 
 else

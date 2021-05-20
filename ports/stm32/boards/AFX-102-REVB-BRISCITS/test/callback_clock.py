@@ -1,26 +1,25 @@
 import uasyncio as asyncio
 import microamp as amp
+import struct
+import utime
 import gc
 
-# the rx data callback handler
-def dataready_handler(fd):
-    avail = amp.channel_avail(fd)
-    buf=b'\x00\x00\x00\x00\x00\x00'
-    if amp.channel_read(fd,buf,4) >= 0:
-        data = list(buf)
-        tm = data[0] | data[1]<<8 | data[2]<<16 | data[3]<<24
-        print("dataready_handler",tm)
+cls='\x1B[1J'
+home='\x1B[H'
+txt='***'
 
-# open the endpoint and assign a event callback function.
-if amp.endpoint_indexof("clock") >= 0:
-    fd=amp.channel_open("clock")
-    if fd >= 0:
-        amp.channel_dataready_handler(fd,dataready_handler,fd)
+def clock_tick_event(fd):
+    print(home)
+    print(struct.unpack('<L',amp.channel_get(fd)))
 
-# just doing some busy work here.
 async def busy():
     while True:
         await asyncio.sleep_ms(1000)
         gc.collect()
 
+fd_clk=amp.channel_open("clock")
+if fd_clk >= 0:
+    amp.channel_dataready_handler(fd_clk,clock_tick_event,fd_clk)
+
+print(cls)
 asyncio.run(busy())
