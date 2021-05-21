@@ -71,7 +71,7 @@ _vectors:
 		.word 	__main_stack_end__	
 		.word 	Reset_Handler				         /* Reset Vector 						 */
 		vector	NonMaskableInt_Handler			   /* Non Maskable Interrupt       		 */
-		.word 	_hard_fault							   /* Hard Fault */
+		.word 	HardFault_Handler					   /* Hard Fault */
 		vector	MemoryManagement_Handler		   /* Cortex-M7 Memory Management Interrupt */
 		vector	BusFault_Handler				      /* Cortex-M7 Bus Fault Interrupt 		 */
 		vector	UsageFault_Handler				   /* Cortex-M7 Usage Fault Interrupt 		 */

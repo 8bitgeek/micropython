@@ -42,7 +42,7 @@
 #define MICROPY_HW_UART7_TX         (pin_F7)
 #define MICROPY_HW_UART7_RX         (pin_F6)
 #define MICROPY_HW_UART_REPL        PYB_UART_7
-#define MICROPY_HW_UART_REPL_BAUD   9600
+#define MICROPY_HW_UART_REPL_BAUD   115200
 
 // I2C busses
 #define MICROPY_HW_I2C1_SCL         (pin_B8)
