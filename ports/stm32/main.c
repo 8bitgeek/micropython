@@ -320,7 +320,7 @@ void stm32_main(void* arg) {
     #endif
 
     // Enable 8-byte stack alignment for IRQ handlers, in accord with EABI
-    SCB->CCR |= SCB_CCR_STKALIGN_Msk;
+    // SCB->CCR |= SCB_CCR_STKALIGN_Msk;
 
     // Hook for a board to run code at start up, for example check if a
     // bootloader should be entered instead of the main application.
@@ -427,7 +427,9 @@ void stm32_main(void* arg) {
     #if MICROPY_PY_THREAD
     pyb_thread_init(&pyb_thread_main);
     #endif
-    pendsv_init();
+    #if !defined(MICROPY_HW_BRISCITS)
+        pendsv_init();
+    #endif
     led_init();
     #if MICROPY_HW_HAS_SWITCH
     switch_init0();
