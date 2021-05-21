@@ -70,11 +70,11 @@ SOFTWARE.
 _vectors:
 		.word 	__main_stack_end__	
 		.word 	Reset_Handler				         /* Reset Vector 						 */
-		vector	NonMaskableInt_IRQ_Handler			/* Non Maskable Interrupt       		 */
+		vector	NonMaskableInt_Handler			   /* Non Maskable Interrupt       		 */
 		.word 	_hard_fault							   /* Hard Fault */
-		vector	MemoryManagement_IRQ_Handler		/* Cortex-M7 Memory Management Interrupt */
-		vector	BusFault_IRQ_Handler				   /* Cortex-M7 Bus Fault Interrupt 		 */
-		vector	UsageFault_IRQ_Handler				/* Cortex-M7 Usage Fault Interrupt 		 */
+		vector	MemoryManagement_Handler		   /* Cortex-M7 Memory Management Interrupt */
+		vector	BusFault_Handler				      /* Cortex-M7 Bus Fault Interrupt 		 */
+		vector	UsageFault_Handler				   /* Cortex-M7 Usage Fault Interrupt 		 */
 		.word 	default_interrupt_handler
 		.word 	default_interrupt_handler
 		.word 	default_interrupt_handler

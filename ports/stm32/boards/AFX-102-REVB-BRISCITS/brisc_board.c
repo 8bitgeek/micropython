@@ -24,9 +24,9 @@
 
 typedef struct _app_state_ {
 
-    cpu_reg_t stm32_main_stack[ STM32_MAIN_STACK_WORDS ];
-    cpu_reg_t clock_stack [ STACK_WORDS ];
-    cpu_reg_t echo_stack  [ STACK_WORDS ];
+    cpu_reg_t stm32_main_stack[ STM32_MAIN_STACK_WORDS ] __attribute__ ((aligned (8)));
+    cpu_reg_t clock_stack [ STACK_WORDS ] __attribute__ ((aligned (8)));
+    cpu_reg_t echo_stack  [ STACK_WORDS ] __attribute__ ((aligned (8)));
 
     int main_thread_handle;
     int stm32_main_thread_handle;
@@ -40,7 +40,7 @@ typedef struct _app_state_ {
  
     microamp_state_t microamp;
     brisc_interface_t brisc_interface;
-} app_state_t;
+} app_state_t __attribute__ ((aligned (8)));
 
 app_state_t app_state;
 
@@ -72,9 +72,8 @@ void board_init(void)
 
     if ( (app_state.main_thread_handle  = b_thread_init( "main" )) >= 0 )
     {
-        /* Set up the micropython systick and pendsv callbacks */
+        /* Set up the micropython systick callbacks */
         b_thread_set_systick_fn( SysTick_Handler );
-        b_thread_set_yield_fn( PendSV_Handler );
 
         /* Set up the micropython interface parameters */
         app_state.brisc_interface.sstack = (cpu_reg_t)&app_state.stm32_main_stack[0];                         
