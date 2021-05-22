@@ -417,12 +417,12 @@ void stm32_main(void* arg) {
     rfcore_init();
     #endif
     #if MICROPY_HW_SDRAM_SIZE
-    sdram_init();
-    bool sdram_valid = true;
-    UNUSED(sdram_valid);
-    #if MICROPY_HW_SDRAM_STARTUP_TEST
-    sdram_valid = sdram_test(false);
-    #endif
+        sdram_init();
+        bool sdram_valid = true;
+        UNUSED(sdram_valid);
+        #if MICROPY_HW_SDRAM_STARTUP_TEST
+            sdram_valid = sdram_test(false);
+        #endif
     #endif
     #if MICROPY_PY_THREAD
     pyb_thread_init(&pyb_thread_main);

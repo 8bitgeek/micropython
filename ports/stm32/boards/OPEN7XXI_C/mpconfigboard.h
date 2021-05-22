@@ -5,7 +5,7 @@
 #define MICROPY_HW_BRISCITS         (1)
 #define USER_C_MODULES              (1)
 
-#define MICROPY_HW_HAS_SWITCH       (1)
+#define MICROPY_HW_HAS_SWITCH       (0)
 #define MICROPY_HW_HAS_FLASH        (1)
 #define MICROPY_HW_ENABLE_RNG       (1)
 #define MICROPY_HW_ENABLE_RTC       (1)
@@ -100,24 +100,24 @@
 #define MICROPY_HEAP_END                sdram_end()
 
 // Timing configuration for 90 Mhz (11.90ns) of SD clock frequency (180Mhz/2)
-#define MICROPY_HW_SDRAM_TIMING_TMRD        (2)
-#define MICROPY_HW_SDRAM_TIMING_TXSR        (7)
-#define MICROPY_HW_SDRAM_TIMING_TRAS        (4)
-#define MICROPY_HW_SDRAM_TIMING_TRC         (7)
-#define MICROPY_HW_SDRAM_TIMING_TWR         (2)
-#define MICROPY_HW_SDRAM_TIMING_TRP         (2)
-#define MICROPY_HW_SDRAM_TIMING_TRCD        (2)
+#define MICROPY_HW_SDRAM_TIMING_TMRD        (2)     // LoadToActiveDelay
+#define MICROPY_HW_SDRAM_TIMING_TXSR        (7)     // ExitSelfRefreshDelay
+#define MICROPY_HW_SDRAM_TIMING_TRAS        (4)     // SelfRefreshTime
+#define MICROPY_HW_SDRAM_TIMING_TRC         (6)     // RowCycleDelay
+#define MICROPY_HW_SDRAM_TIMING_TWR         (2)     // WriteRecoveryTime
+#define MICROPY_HW_SDRAM_TIMING_TRP         (2)     // RPDelay
+#define MICROPY_HW_SDRAM_TIMING_TRCD        (2)     // RCDelay
 #define MICROPY_HW_SDRAM_REFRESH_RATE       (64) // ms
 
 #define MICROPY_HW_SDRAM_BURST_LENGTH       1
-#define MICROPY_HW_SDRAM_CAS_LATENCY        2
+#define MICROPY_HW_SDRAM_CAS_LATENCY        3
 #define MICROPY_HW_SDRAM_COLUMN_BITS_NUM    8
 #define MICROPY_HW_SDRAM_ROW_BITS_NUM       12
 #define MICROPY_HW_SDRAM_MEM_BUS_WIDTH      16
 #define MICROPY_HW_SDRAM_INTERN_BANKS_NUM   4
-#define MICROPY_HW_SDRAM_CLOCK_PERIOD       2
-#define MICROPY_HW_SDRAM_RPIPE_DELAY        0
-#define MICROPY_HW_SDRAM_RBURST             (1)
+#define MICROPY_HW_SDRAM_CLOCK_PERIOD       2       // SDClockPeriod
+#define MICROPY_HW_SDRAM_RPIPE_DELAY        1       // ReadPipeDelay
+#define MICROPY_HW_SDRAM_RBURST             (0)     // ReadBurst
 #define MICROPY_HW_SDRAM_WRITE_PROTECTION   (0)
 #define MICROPY_HW_SDRAM_AUTOREFRESH_NUM    (8)
 

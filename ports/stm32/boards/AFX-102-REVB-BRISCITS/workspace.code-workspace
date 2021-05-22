@@ -4,7 +4,7 @@
 			"path": "../../../.."
 		},
 		{
-			"path": "../../../../lib/briscits"
+			"path": "../../../../lib/MicroAMP"
 		}
 	],
 	"settings": {
@@ -17,7 +17,8 @@
 			"string.h": "c",
 			"microamp.h": "c",
 			"brisc_thread.h": "c",
-			"xprintf.h": "c"
+			"xprintf.h": "c",
+			"brisc_fault.h": "c"
 		}
 	}
 }
