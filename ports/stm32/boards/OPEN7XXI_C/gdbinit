@@ -10,4 +10,5 @@ target remote localhost:3333
 load build-OPEN7XXI_C/firmware.elf
 file build-OPEN7XXI_C/firmware.elf
 break stm32_main
+break powerctrl_mcu_reset
 continue

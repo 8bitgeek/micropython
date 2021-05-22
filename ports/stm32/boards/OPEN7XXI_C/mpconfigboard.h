@@ -1,6 +1,12 @@
 #define MICROPY_HW_BOARD_NAME       "Open7XXI-C-MicroAMP"
 #define MICROPY_HW_MCU_NAME         "STM32F746"
 
+#if 0
+    // #define MICROPY_DEBUG_VERBOSE       (1)
+    // #define DEBUG_PRINT                 (1)
+    #define MICROPY_DEBUG_PRINTERS      (1)
+#endif
+
 #define MICROPY_ENABLE_GC           (1)
 #define MICROPY_HW_BRISCITS         (1)
 #define USER_C_MODULES              (1)

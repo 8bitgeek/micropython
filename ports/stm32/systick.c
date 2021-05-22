@@ -40,10 +40,9 @@ void SysTick_Handler(void) {
     // Instead of calling HAL_IncTick we do the increment here of the counter.
     // This is purely for efficiency, since SysTick is called 1000 times per
     // second at the highest interrupt priority.
-    uint32_t uw_tick = uwTick + 1;
-    uwTick = uw_tick;
+    ++uwTick;
 
-    return;
+    // return;
 
     // Read the systick control regster. This has the side effect of clearing
     // the COUNTFLAG bit, which makes the logic in mp_hal_ticks_us
@@ -51,12 +50,12 @@ void SysTick_Handler(void) {
     SysTick->CTRL;
 
     // Dispatch to any registered handlers in a cycle
-    systick_dispatch_t f = systick_dispatch_table[uw_tick & (SYSTICK_DISPATCH_NUM_SLOTS - 1)];
+    systick_dispatch_t f = systick_dispatch_table[uwTick & (SYSTICK_DISPATCH_NUM_SLOTS - 1)];
     if (f != NULL) {
-        f(uw_tick);
+        f(uwTick);
     }
 
-    if (soft_timer_next == uw_tick) {
+    if (soft_timer_next == uwTick) {
         pendsv_schedule_dispatch(PENDSV_DISPATCH_SOFT_TIMER, soft_timer_handler);
     }
 

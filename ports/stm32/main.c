@@ -315,8 +315,8 @@ void stm32_main(void* arg) {
 #endif
     uint32_t reset_mode = 0;
     #if !defined(STM32F0) && defined(MICROPY_HW_VTOR)
-    // Change IRQ vector table if configured differently
-    SCB->VTOR = MICROPY_HW_VTOR;
+        // Change IRQ vector table if configured differently
+        SCB->VTOR = MICROPY_HW_VTOR;
     #endif
 
     // Enable 8-byte stack alignment for IRQ handlers, in accord with EABI
@@ -332,46 +332,46 @@ void stm32_main(void* arg) {
 
     #if defined(STM32F4)
 
-    #if INSTRUCTION_CACHE_ENABLE
-    __HAL_FLASH_INSTRUCTION_CACHE_ENABLE();
-    #endif
-    #if DATA_CACHE_ENABLE
-    __HAL_FLASH_DATA_CACHE_ENABLE();
-    #endif
-    #if PREFETCH_ENABLE
-    __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
-    #endif
+        #if INSTRUCTION_CACHE_ENABLE
+            __HAL_FLASH_INSTRUCTION_CACHE_ENABLE();
+        #endif
+        #if DATA_CACHE_ENABLE
+            __HAL_FLASH_DATA_CACHE_ENABLE();
+        #endif
+        #if PREFETCH_ENABLE
+            __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
+        #endif
 
     #elif defined(STM32F7) || defined(STM32H7)
 
-    #if ART_ACCLERATOR_ENABLE
-    __HAL_FLASH_ART_ENABLE();
-    #endif
+        #if ART_ACCLERATOR_ENABLE
+            __HAL_FLASH_ART_ENABLE();
+        #endif
 
-    #if !defined(MICROPY_HW_BRISCITS)
-        SCB_EnableICache();
-        SCB_EnableDCache();
-    #endif
+        #if !defined(MICROPY_HW_BRISCITS)
+            SCB_EnableICache();
+            SCB_EnableDCache();
+        #endif
     
     #elif defined(STM32L4)
 
-    #if !INSTRUCTION_CACHE_ENABLE
-    __HAL_FLASH_INSTRUCTION_CACHE_DISABLE();
-    #endif
-    #if !DATA_CACHE_ENABLE
-    __HAL_FLASH_DATA_CACHE_DISABLE();
-    #endif
-    #if PREFETCH_ENABLE
-    __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
-    #endif
+        #if !INSTRUCTION_CACHE_ENABLE
+            __HAL_FLASH_INSTRUCTION_CACHE_DISABLE();
+        #endif
+        #if !DATA_CACHE_ENABLE
+            __HAL_FLASH_DATA_CACHE_DISABLE();
+        #endif
+        #if PREFETCH_ENABLE
+            __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
+        #endif
 
     #endif
 
     mpu_init();
 
     #if __CORTEX_M >= 0x03
-    // Set the priority grouping
-    NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+        // Set the priority grouping
+        NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
     #endif
 
     // SysTick is needed by HAL_RCC_ClockConfig (called in SystemClock_Config)

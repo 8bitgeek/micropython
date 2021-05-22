@@ -19,7 +19,7 @@
 #define EVER            ;;
 #define STACK_BYTES     (1024)
 #define STACK_WORDS     STACK_BYTES / sizeof(cpu_reg_t)
-#define STM32_MAIN_STACK_WORDS ((1024*4) / sizeof(cpu_reg_t))
+#define STM32_MAIN_STACK_WORDS ((1024*16) / sizeof(cpu_reg_t))
 #define STM32_MAIN_LOW_STACK_LIMIT (1024)
 
 typedef struct _app_state_ {
