@@ -1,5 +1,9 @@
-#define MICROPY_HW_BOARD_NAME       "Open7XXI-C"
+#define MICROPY_HW_BOARD_NAME       "Open7XXI-C-MicroAMP"
 #define MICROPY_HW_MCU_NAME         "STM32F746"
+
+#define MICROPY_ENABLE_GC           (1)
+#define MICROPY_HW_BRISCITS         (1)
+#define USER_C_MODULES              (1)
 
 #define MICROPY_HW_HAS_SWITCH       (1)
 #define MICROPY_HW_HAS_FLASH        (1)
@@ -8,8 +12,8 @@
 #define MICROPY_HW_ENABLE_USB       (1)
 #define MICROPY_HW_ENABLE_SDCARD    (0)
 
-#define MICROPY_BOARD_EARLY_INIT    Open7XXI_C_board_early_init
-void Open7XXI_C_board_early_init(void);
+#define MICROPY_BOARD_EARLY_INIT    /* AFX_102_REVB_PRISCITS_board_early_init */
+/* void AFX_102_REVB_PRISCITS_board_early_init(void); */
 
 // HSE is 8MHz
 // VCOClock = HSE * PLLN / PLLM = 8 MHz * 216 / 4 = 432 MHz

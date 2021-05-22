@@ -8,7 +8,9 @@
 #include "boards/stm32f7xx_hal_conf_base.h"
 
 // Oscillator values in Hz
-#define HSE_VALUE (8000000)
+#if !defined(HSE_VALUE)
+    #define HSE_VALUE (8000000)
+#endif
 #define LSE_VALUE (32768)
 #define EXTERNAL_CLOCK_VALUE (12288000)
 

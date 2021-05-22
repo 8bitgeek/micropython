@@ -1,0 +1,13 @@
+define hook-next
+  refresh
+end
+define hook-stop
+  refresh
+end
+layout split
+winheight src 24
+target remote localhost:3333
+load build-OPEN7XXI_C/firmware.elf
+file build-OPEN7XXI_C/firmware.elf
+break stm32_main
+continue

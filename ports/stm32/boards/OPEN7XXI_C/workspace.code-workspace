@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "../../../.."
+		},
+		{
+			"path": "../../../../lib/briscits"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"tuple": "c",
+			"mphal.h": "c",
+			"mphalport.h": "c",
+			"mpconfig.h": "c",
+			"flash.h": "c",
+			"string.h": "c",
+			"microamp.h": "c",
+			"brisc_thread.h": "c",
+			"xprintf.h": "c"
+		}
+	}
+}
