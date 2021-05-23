@@ -1,0 +1,4 @@
+target remote localhost:3333
+load build-OPEN7XXI_C/firmware.elf
+file build-OPEN7XXI_C/firmware.elf
+quit
