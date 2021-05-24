@@ -14,12 +14,12 @@ elif [ "$1" == "stop" ]; then
 
 elif [ "$1" == "debug" ]; then
 
-    make -j6 BOARD=$BOARD OPENOCD_CONFIG=$OPENOCDCONFIG DEBUG=1 V=1 USER_C_MODULES=../../lib/MicroAMP/micropython_modules $1 $2 $3
+    make -j6 BOARD=$BOARD OPENOCD_CONFIG=$OPENOCDCONFIG DEBUG=1 V=1 USER_C_MODULES=../../lib/MicroAMP/micropython_modules 
     arm-none-eabi-gdb -tui -x boards/OPEN7XXI_C/gdbinit
 
 elif [ "$1" == "flash" ]; then
 
-    make -j6 BOARD=$BOARD OPENOCD_CONFIG=$OPENOCDCONFIG DEBUG=1 V=1 USER_C_MODULES=../../lib/MicroAMP/micropython_modules $1 $2 $3
+    make -j6 BOARD=$BOARD OPENOCD_CONFIG=$OPENOCDCONFIG DEBUG=1 V=1 USER_C_MODULES=../../lib/MicroAMP/micropython_modules 
     arm-none-eabi-gdb -x boards/OPEN7XXI_C/gdbinit-flash
 
 elif [ "$1" == "clean" ]; then
